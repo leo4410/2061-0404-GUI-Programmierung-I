@@ -1,4 +1,5 @@
 import sys
+import csv
 from PyQt5.QtWidgets import *
 
 class MyWindow(QMainWindow):
@@ -26,28 +27,31 @@ class MyWindow(QMainWindow):
         # form fields
         layout = QFormLayout()
         
-        vornameLineEdit = QLineEdit()
-        nameLineEdit = QLineEdit()
-        adresseLineEdit = QLineEdit()
-        plzLineEdit = QLineEdit()
-        ortLineEdit = QLineEdit()
+        self.vornameLineEdit = QLineEdit()
+        self.nameLineEdit = QLineEdit()
+        self.adresseLineEdit = QLineEdit()
+        self.plzLineEdit = QLineEdit()
+        self.ortLineEdit = QLineEdit()
         
-        datumDateEdit = QDateEdit()
+        self.datumDateEdit = QDateEdit()
         
-        landComboBox = QComboBox()
-        landComboBox.addItems(["Schweiz", "Deutschland", "Österreich"])
+        self.landComboBox = QComboBox()
+        self.landComboBox.addItems(["Schweiz", "Deutschland", "Österreich"])
         
-        button = QPushButton("Speichern")
+        self.button = QPushButton("Speichern")
+        self.button.clicked.connect(self.write_file)
         
         # Layout füllen:
-        layout.addRow("Vorname:", vornameLineEdit)
-        layout.addRow("Name:", nameLineEdit)
-        layout.addRow("Geburtsdatum:", datumDateEdit)
-        layout.addRow("Adresse:", adresseLineEdit)
-        layout.addRow("Postleitzahl:", plzLineEdit)
-        layout.addRow("Ort:", ortLineEdit)
-        layout.addRow("Land:", landComboBox)
-        layout.addRow(button)
+        layout.addRow("Vorname:", self.vornameLineEdit)
+        layout.addRow("Name:", self.nameLineEdit)
+        layout.addRow("Geburtsdatum:", self.datumDateEdit)
+        layout.addRow("Adresse:", self.adresseLineEdit)
+        layout.addRow("Postleitzahl:", self.plzLineEdit)
+        layout.addRow("Ort:", self.ortLineEdit)
+        layout.addRow("Land:", self.landComboBox)
+        layout.addRow(self.button)
+        
+    
 
         # Zentrales Widget erstellen und layout hinzufügen
         center = QWidget()
@@ -67,7 +71,17 @@ class MyWindow(QMainWindow):
     def menu_quit(self):
         print("Menu Quit wurde gewählt...")
         self.close()  
-    
+        
+    # form functions
+    def write_file(self):
+        print(self.vornameLineEdit.text())
+        print(self.nameLineEdit.text())
+        print(self.datumDateEdit.text())
+        print(self.adresseLineEdit.text())
+        print(self.plzLineEdit.text())
+        print(self.ortLineEdit.text())
+        print(self.landComboBox.currentText())
+        
 def main():
     app = QApplication(sys.argv)  # Qt Applikation erstellen
     mainwindow = MyWindow()       # Instanz Fenster erstellen
