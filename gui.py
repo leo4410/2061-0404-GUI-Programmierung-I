@@ -9,39 +9,44 @@ class MyWindow(QMainWindow):
         # window title
         self.setWindowTitle("GUI-Programmierung")
         
-        
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
         # menu bar
         menubar = self.menuBar()
         filemenu = menubar.addMenu("File")
 
+        # connect action buttons to functions
         save = QAction("Save", self)
         save.triggered.connect(self.menu_save)
         quit = QAction("Quit", self)
         quit.triggered.connect(self.menu_quit)
-        quit.setMenuRole(QAction.QuitRole)   # Rolle "beenden" (für MacOS)
 
+        # add action buttons to menubar
         filemenu.addAction(save)
         filemenu.addAction(quit)
         
-        
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
         # form fields
         layout = QFormLayout()
         
+        # build text inputs
         self.vornameLineEdit = QLineEdit()
         self.nameLineEdit = QLineEdit()
         self.adresseLineEdit = QLineEdit()
         self.plzLineEdit = QLineEdit()
         self.ortLineEdit = QLineEdit()
-        
         self.datumDateEdit = QDateEdit()
         
+        # build combo box
         self.landComboBox = QComboBox()
         self.landComboBox.addItems(["Schweiz", "Deutschland", "Österreich"])
         
+        # build button
         self.button = QPushButton("Speichern")
         self.button.clicked.connect(self.write_file)
         
-        # Layout füllen:
+        # add layout fields
         layout.addRow("Vorname:", self.vornameLineEdit)
         layout.addRow("Name:", self.nameLineEdit)
         layout.addRow("Geburtsdatum:", self.datumDateEdit)
@@ -51,37 +56,45 @@ class MyWindow(QMainWindow):
         layout.addRow("Land:", self.landComboBox)
         layout.addRow(self.button)
         
-    
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-        # Zentrales Widget erstellen und layout hinzufügen
+        # vorgegeben zum applikationsstart
         center = QWidget()
         center.setLayout(layout)
-
-        # Zentrales Widget in diesem Fenster setzen
         self.setCentralWidget(center)
-
-        # Fenster anzeigen
         self.show()
         
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         
     # menu bar functions    
     def menu_save(self):
-        print("Menu Save wurde gewählt...")
+        self.write_file()
 
     def menu_quit(self):
-        print("Menu Quit wurde gewählt...")
         self.close()  
         
     # form functions
     def write_file(self):
-        print(self.vornameLineEdit.text())
-        print(self.nameLineEdit.text())
-        print(self.datumDateEdit.text())
-        print(self.adresseLineEdit.text())
-        print(self.plzLineEdit.text())
-        print(self.ortLineEdit.text())
-        print(self.landComboBox.currentText())
+
+        # load form data to array
+        formfields = []
+        formfields.append(self.vornameLineEdit.text())
+        formfields.append(self.nameLineEdit.text())
+        formfields.append(self.datumDateEdit.text())
+        formfields.append(self.adresseLineEdit.text())
+        formfields.append(self.plzLineEdit.text())
+        formfields.append(self.ortLineEdit.text())
+        formfields.append(self.landComboBox.currentText())
+
+        # write array to csv file
+        file = open("output.csv", "w", encoding="utf-8")
+        writer = csv.writer(file, delimiter=",", lineterminator="\n")
+        writer.writerow(formfields)
+        file.close()
         
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+# vorgegeben zum applikationsstart        
 def main():
     app = QApplication(sys.argv)  # Qt Applikation erstellen
     mainwindow = MyWindow()       # Instanz Fenster erstellen
